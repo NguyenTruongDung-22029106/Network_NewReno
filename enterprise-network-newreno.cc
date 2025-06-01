@@ -88,7 +88,7 @@ SetupTcpConnection(Ptr<Node> sourceNode, Ptr<Node> sinkNode,
         }
 
         // Connect Cwnd trace
-        if (cwndStream && tcpVariant == "ns3::TcpNewReno")
+        if (cwndStream && (tcpVariant == "ns3::TcpNewReno" || tcpVariant == "ns3::TcpReno"))
         {
             Ptr<Application> app = sourceApp.Get(0);
             Ptr<BulkSendApplication> bsa = DynamicCast<BulkSendApplication>(app);
@@ -98,7 +98,7 @@ SetupTcpConnection(Ptr<Node> sourceNode, Ptr<Node> sinkNode,
                 if (tcpSocket)
                 {
                     tcpSocket->TraceConnectWithoutContext("CongestionWindow", MakeBoundCallback(&CwndChangeTracer, cwndStream));
-                    NS_LOG_INFO("Cwnd trace connected for NewReno flow");
+                    NS_LOG_INFO("Cwnd trace connected for " << tcpVariant << " flow");
                 }
                 else
                 {
@@ -166,8 +166,8 @@ main(int argc, char* argv[])
     double competingTcp1StopTime = 180.0;
     double competingTcp2StartTime = 40.0;
     double competingTcp2StopTime = 160.0;
-    double renoTcpStartTime = 0; // 60.0 to enable
-    double renoTcpStopTime = 0;  // 140.0 to enable
+    double renoTcpStartTime = 60.0; // Kích hoạt TCP Reno
+    double renoTcpStopTime = 140.0;  // Chạy cùng thời gian với competing flows
     double udp1StartTime = 30.0;
     double udp1StopTime = 90.0;
     std::string udp1DataRate = "1Mbps";
